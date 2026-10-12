@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shalola - Mening Abadiy Muhabbatim ❤️</title>
+    <!-- Google Fonts: Elegant & Romantic -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            background: #030008;
+            color: #fff;
+        }
+
+        /* Canvas Background for Comets and Stars */
+        #spaceCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: radial-gradient(circle at center, rgba(15, 5, 30, 0.4) 0%, rgba(3, 0, 8, 0.8) 100%);
+        }
+
+        /* Header Typography */
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            color: #ffb6c1;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 1.5s ease forwards 0.5s;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 5rem;
+            background: linear-gradient(45deg, #ff4d6d, #ff758c, #ff7eb3, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: scaleIn 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1s;
+            text-shadow: 0 0 30px rgba(255, 77, 109, 0.5);
+        }
+
+        /* Glowing Shalola Banner */
+        .glowing-banner {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            background: rgba(255, 77, 109, 0.15);
+            border: 2px solid rgba(255, 77, 109, 0.6);
+            box-shadow: 0 0 25px rgba(255, 77, 109, 0.6), inset 0 0 15px rgba(255, 77, 109, 0.4);
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards 1.8s, pulseGlow 2.5s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 15px rgba(255, 77, 109, 0.4), inset 0 0 10px rgba(255, 77, 109, 0.2);
+                border-color: rgba(255, 77, 109, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 35px rgba(255, 77, 109, 0.9), inset 0 0 25px rgba(255, 77, 109, 0.7);
+                border-color: #ff4d6d;
+                transform: scale(1.03);
+            }
+        }
+
+        /* Real-Time Love Timer from May 3rd */
+        .timer-box {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards 2.2s;
+        }
+
+        .time-segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ff758c;
+        }
+
+        .time-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #aaa;
+        }
+
+        /* Special Gift Button */
+        .gift-btn {
+            position: relative;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+            background: linear-gradient(135deg, #ff4d6d, #c9184a);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(201, 24, 74, 0.5);
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards 2.6s;
+            z-index: 20;
+        }
+
+        .gift-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.8);
+            background: linear-gradient(135deg, #ff758c, #ff4d6d);
+        }
+
+        .gift-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Masterpiece Heart Container (Initially Hidden) */
+        #heartContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 0, 8, 0.92);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        #heartContainer.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* SVG Heart Drawing */
+        .svg-heart-wrapper {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #masterHeartPath {
+            fill: rgba(255, 77, 109, 0.15);
+            stroke: #ff4d6d;
+            stroke-width: 4;
+            stroke-dasharray: 1500;
+            stroke-dashoffset: 1500;
+            filter: drop-shadow(0 0 25px #ff4d6d);
+        }
+
+        #heartContainer.active #masterHeartPath {
+            animation: drawHeart 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes drawHeart {
+            to {
+                stroke-dashoffset: 0;
+                fill: rgba(255, 77, 109, 0.35);
+            }
+        }
+
+        /* Text inside Master Heart */
+        .heart-inner-text {
+            position: absolute;
+            width: 80%;
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px #ff4d6d, 0 0 30px #ff758c;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        #heartContainer.active .heart-inner-text {
+            animation: popInText 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 3.2s;
+        }
+
+        @keyframes popInText {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Close Gift Button */
+        .close-gift {
+            margin-top: 30px;
+            padding: 10px 25px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            opacity: 0;
+        }
+
+        #heartContainer.active .close-gift {
+            animation: fadeIn 1s ease forwards 4s;
+        }
+
+        .close-gift:hover {
+            background: #ff4d6d;
+            border-color: #ff4d6d;
+            box-shadow: 0 0 15px #ff4d6d;
+        }
+
+        /* Click Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,117,140,0.8) 0%, rgba(255,77,109,0) 70%);
+            transform: scale(0);
+            animation: rippleAnim 0.8s linear forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes rippleAnim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Standard Keyframes */
+        @keyframes fadeInDown {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .main-title { font-size: 3.5rem; }
+            .glowing-banner { font-size: 1.3rem; padding: 10px 20px; }
+            .svg-heart-wrapper { width: 280px; height: 280px; }
+            .heart-inner-text { font-size: 1.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ultra-Realistic Starry & Comet Space Canvas -->
+    <canvas id="spaceCanvas"></canvas>
+
+    <!-- Main Page Content -->
+    <div class="container">
+        <div class="subtitle">DUNYODAGI ENG GO'ZAL QIZGA</div>
+        <h1 class="main-title">Shalola</h1>
+        
+        <div class="glowing-banner" id="glowText">
+            ✨ Shalola, men seni chin dildan sevaman! ✨
+        </div>
+
+        <!-- Timer starting from May 3rd -->
+        <div class="timer-box">
+            <div class="time-segment">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">Kun</span>
+            </div>
+            <div class="time-segment">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">Soat</span>
+            </div>
+            <div class="time-segment">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">Daqiqa</span>
+            </div>
+            <div class="time-segment">
+                <span class="time-value" id="seconds">00</span>
+                <span class="time-label">Soniya</span>
+            </div>
+        </div>
+
+        <button class="gift-btn" id="giftBtn">🎁 Maxsus Sovg'ani Ochish</button>
+    </div>
+
+    <!-- Masterpiece Heart Modal (Generated via SVG path drawing) -->
+    <div id="heartContainer">
+        <div class="svg-heart-wrapper">
+            <svg viewBox="0 0 500 500" width="100%" height="100%">
+                <path id="masterHeartPath" d="M250,400 C250,400 450,260 450,150 C450,75 380,20 310,20 C265,20 250,60 250,60 C250,60 235,20 190,20 C120,20 50,75 50,150 C50,260 250,400 250,400 Z" />
+            </svg>
+            <div class="heart-inner-text">
+                Shalola, seni chin dildan sevaman! ❤️
+            </div>
+        </div>
+        <button class="close-gift" id="closeBtn">Orqaga Qaytish</button>
+    </div>
+
+    <script>
+        // --- 1. CONSOLE STYLING & LOVE MESSAGE ---
+        console.log("%c❤️ SHALOLA - DUNYODAGI ENG GO'ZAL SEVGI KODI ❤️", "color: #ff4d6d; font-size: 20px; font-weight: bold; background: #030008; padding: 10px; border-radius: 5px; border: 2px solid #ff4d6d;");
+        console.log("%cBu kod faqat va faqat Shalola uchun maxsus yaratildi!", "color: #ff758c; font-size: 14px; font-style: italic;");
+
+        // --- 2. ULTRA-REALISTIC CANVAS COMETS & STARS SYSTEM ---
+        const canvas = document.getElementById('spaceCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Stars setup
+        const stars = [];
+        const numStars = 300;
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                alpha: Math.random(),
+                speed: Math.random() * 0.02 + 0.005
+            });
+        }
+
+        // Comets setup
+        const comets = [];
+        function createComet() {
+            comets.push({
+                x: Math.random() * canvas.width * 1.5 - canvas.width * 0.5,
+                y: -50,
+                length: Math.random() * 120 + 80,
+                speed: Math.random() * 6 + 4,
+                angle: Math.PI / 4 + (Math.random() * 0.2 - 0.1),
+                opacity: Math.random() * 0.7 + 0.3
+            });
+        }
+
+        // Spawn comets periodically
+        setInterval(() => {
+            if (comets.length < 4) createComet();
+        }, 2500);
+
+        function animateSpace() {
+            ctx.fillStyle = 'rgba(3, 0, 8, 0.25)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Stars
+            stars.forEach(star => {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
+                ctx.fill();
+            });
+
+            // Draw Comets
+            comets.forEach((comet, index) => {
+                comet.x += Math.cos(comet.angle) * comet.speed;
+                comet.y += Math.sin(comet.angle) * comet.speed;
+
+                let tailX = comet.x - Math.cos(comet.angle) * comet.length;
+                let tailY = comet.y - Math.sin(comet.angle) * comet.length;
+
+                let gradient = ctx.createLinearGradient(comet.x, comet.y, tailX, tailY);
+                gradient.addColorStop(0, `rgba(255, 255, 255, ${comet.opacity})`);
+                gradient.addColorStop(0.2, `rgba(255, 117, 140, ${comet.opacity * 0.8})`);
+                gradient.addColorStop(1, 'rgba(255, 77, 109, 0)');
+
+                ctx.beginPath();
+                ctx.moveTo(comet.x, comet.y);
+                ctx.lineTo(tailX, tailY);
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Comet glowing head
+                ctx.beginPath();
+                ctx.arc(comet.x, comet.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#ff4d6d';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Remove if out of bounds
+                if (comet.x > canvas.width + 200 || comet.y > canvas.height + 200) {
+                    comets.splice(index, 1);
+                }
+            });
+
+            requestAnimationFrame(animateSpace);
+        }
+        animateSpace();
+
+        // --- 3. REAL-TIME LOVE TIMER (Starting from May 3rd) ---
+        function updateTimer() {
+            // Joriy yilning yoki o'tgan yilning 3-mayi (Joriy yil 3-may olingan)
+            const currentYear = new Date().getFullYear();
+            // Agar joriy sana 3-maydan oldin bo'lsa o'tgan yilni olish mumkin, lekin odatda joriy/o'tgan 3-may hisoblanadi:
+            let startDate = new Date(currentYear, 4, 3, 0, 0, 0); // 4-oy bu May (0-dan boshlanadi: 0=Yan, ..., 4=May)
+            const now = new Date();
+            
+            if (now < startDate) {
+                startDate = new Date(currentYear - 1, 4, 3, 0, 0, 0);
+            }
+
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- 4. INTERACTIVE CLICK RIPPLES & PARTICLES ---
+        window.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = `${e.clientX}px`;
+            ripple.style.top = `${e.clientY}px`;
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 800);
+        });
+
+        // --- 5. SPECIAL GIFT MODAL INTERACTIONS ---
+        const giftBtn = document.getElementById('giftBtn');
+        const heartContainer = document.getElementById('heartContainer');
+        const closeBtn = document.getElementById('closeBtn');
+
+        giftBtn.addEventListener('click', () => {
+            heartContainer.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            heartContainer.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
